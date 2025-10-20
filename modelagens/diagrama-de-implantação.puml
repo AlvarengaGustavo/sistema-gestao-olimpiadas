@@ -1,0 +1,46 @@
+@startuml
+
+node "Cliente Web" as Client {
+  component "Navegador" as Browser
+}
+
+node "Firewall/Load Balancer" as FW {
+  component "Balanceador de Carga" as LB
+}
+
+node "Servidor Web" as Web {
+  artifact "SGO-API.war" as API
+}
+
+node "Servidor de Aplicação" as App {
+  component "Módulo de Inscrições" as Insc
+  component "Módulo de Alocação" as Aloc
+  component "Módulo de Resultados" as Res
+  component "Módulo de Relatórios" as Relat
+}
+
+node "Servidor de Banco de Dados" as DB {
+  database "SGO_DB" as SGO_DB {
+    folder "Tabelas: Competição, Atleta, Local, etc."
+  }
+}
+
+node "Servidor de Autenticação" as Auth {
+  database "Auth_DB"
+}
+
+Browser --> LB : HTTPS
+LB --> API : HTTP
+API --> Insc : Chamada Interna
+API --> Aloc : Chamada Interna
+API --> Res : Chamada Interna
+API --> Relat : Chamada Interna
+
+Insc --> SGO_DB : JDBC
+Aloc --> SGO_DB : JDBC
+Res --> SGO_DB : JDBC
+Relat --> SGO_DB : JDBC
+
+API --> Auth : Autenticação
+
+@enduml

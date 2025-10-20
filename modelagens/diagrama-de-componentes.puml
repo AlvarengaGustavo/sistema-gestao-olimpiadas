@@ -1,0 +1,41 @@
+@startuml
+skinparam componentStyle uml2
+
+component "Interface Web (UI)" as UI
+component "API SGO" as API
+component "Módulo de Inscrições" as ModInscr
+component "Módulo de Alocação" as ModAloc
+component "Módulo de Resultados" as ModRes
+component "Módulo de Relatórios" as ModRel
+component "Banco de Dados" as DB
+
+' --- Interfaces principais ---
+interface IInscricao
+interface IAlocacao
+interface IResultado
+interface IRelatorio
+interface IDataAccess
+
+' --- Interfaces providas ---
+ModInscr -up-|> IInscricao
+ModAloc -up-|> IAlocacao
+ModRes -up-|> IResultado
+ModRel -up-|> IRelatorio
+DB -up-|> IDataAccess
+
+' --- Conexões entre componentes ---
+UI --> API
+API ..> IInscricao
+API ..> IAlocacao
+API ..> IResultado
+API ..> IRelatorio
+
+ModInscr ..> IDataAccess
+ModAloc ..> IDataAccess
+ModRes ..> IDataAccess
+ModRel ..> IDataAccess
+
+ModRel ..> IResultado : usa dados
+IDataAccess <.. DB
+
+@enduml

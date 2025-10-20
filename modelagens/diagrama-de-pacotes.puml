@@ -1,0 +1,50 @@
+@startuml
+skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+
+package "sgo" {
+
+  package "presentation" {
+    [InterfaceWeb]
+    [Controladores]
+  }
+
+  package "application" {
+    [InscricaoService]
+    [AlocacaoService]
+    [ResultadoService]
+    [RelatorioService]
+  }
+
+  package "domain" {
+    [Competicao]
+    [Atleta]
+    [Pais]
+    [Local]
+    [Resultado]
+    [Medalha]
+    [RelatorioMedalhas]
+  }
+
+  package "infrastructure" {
+    [BancoDeDados]
+    [Repositorios]
+  }
+}
+
+' --- Dependências principais ---
+[InterfaceWeb] --> [Controladores]
+[Controladores] --> [InscricaoService]
+[Controladores] --> [AlocacaoService]
+[Controladores] --> [ResultadoService]
+[Controladores] --> [RelatorioService]
+
+[InscricaoService] --> [Repositorios]
+[AlocacaoService] --> [Repositorios]
+[ResultadoService] --> [Repositorios]
+[RelatorioService] --> [Repositorios]
+
+[Repositorios] --> [BancoDeDados]
+[Repositorios] --> [domain]
+
+@enduml

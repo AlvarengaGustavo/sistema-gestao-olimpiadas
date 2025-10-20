@@ -1,0 +1,85 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+package "Model" {
+
+  class Competicao {
+    +id: Long
+    +nome: String
+    +modalidade: String
+    +data: Date
+    +hora: Time
+    +local: Local
+    +status: String
+    --
+    +adicionarAtleta(a: Atleta)
+    +removerAtleta(a: Atleta)
+    +definirLocal(l: Local)
+    +registrarResultado(r: Resultado)
+    +listarResultados(): List<Resultado>
+  }
+
+  class Atleta {
+    +id: Long
+    +nome: String
+    +pais: Pais
+    --
+    +inscrever(c: Competicao)
+    +cancelarInscricao(c: Competicao)
+    +listarCompeticoes(): List<Competicao>
+  }
+
+  class Pais {
+    +id: Long
+    +nome: String
+    --
+    +contarMedalhas(): Map<String, Integer>
+  }
+
+  class Local {
+    +id: Long
+    +nome: String
+    +endereco: String
+    +capacidade: Integer
+    --
+    +verificarDisponibilidade(data: Date, hora: Time): Boolean
+  }
+
+  class Resultado {
+    +id: Long
+    +posicao: int
+    +tempo: String
+    +pontuacao: Double
+    +atleta: Atleta
+    +competicao: Competicao
+    +medalha: Medalha
+    --
+    +atribuirMedalha()
+  }
+
+  class Medalha {
+    +tipo: String  ' OURO, PRATA, BRONZE
+    --
+    +getPontuacao(): int
+  }
+
+  class RelatorioMedalhas {
+    +pais: Pais
+    +ouro: int
+    +prata: int
+    +bronze: int
+    --
+    +gerarRelatorio(): String
+  }
+}
+
+' --- Relacionamentos ---
+Competicao "1" o-- "0..*" Atleta : participa >
+Atleta "1" --> "1" Pais : representa >
+Competicao "1" --> "1" Local : ocorre em >
+Competicao "1" *-- "0..*" Resultado : gera >
+Resultado "1" --> "1" Atleta
+Resultado "1" --> "1" Medalha
+RelatorioMedalhas "1" --> "1" Pais
+
+@enduml
